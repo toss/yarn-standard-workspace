@@ -1,9 +1,13 @@
 {
   "name": "toss-standard-workspace",
   "packageManager": "yarn@3.2.3",
+  "private": true,
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "new": "./.scripts/scaffold.sh"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
