@@ -126,6 +126,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@toss/toss-standard-workpsace-commonjs@workspace:packages/commonjs"
   dependencies:
+    eslint: ^8.33.0
     tsup: ^6.5.0
     typescript: ^4.9.5
   languageName: unknown
@@ -900,6 +901,17 @@ __metadata:
   version: 4.0.0
   resolution: "escape-string-regexp@npm:4.0.0"
   checksum: 98b48897d93060f2322108bf29db0feba7dd774be96cd069458d1453347b25ce8682ecc39859d4bca2203cc0ab19c237bcc71755eff49a0f8d90beadeeba5cc5
+  languageName: node
+  linkType: hard
+
+"eslint-config-prettier@npm:^8.6.0":
+  version: 8.6.0
+  resolution: "eslint-config-prettier@npm:8.6.0"
+  peerDependencies:
+    eslint: ">=7.0.0"
+  bin:
+    eslint-config-prettier: bin/cli.js
+  checksum: ff0d0dfc839a556355422293428637e8d35693de58dabf8638bf0b6529131a109d0b2ade77521aa6e54573bb842d7d9d322e465dd73dd61c7590fa3834c3fa81
   languageName: node
   linkType: hard
 
@@ -2369,6 +2381,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.49.0
     "@typescript-eslint/parser": ^5.49.0
     eslint: ^8.33.0
+    eslint-config-prettier: ^8.6.0
     typescript: ^4.9.5
   languageName: unknown
   linkType: soft

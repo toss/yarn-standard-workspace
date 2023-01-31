@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "lib": ["es2022"],
     "module": "CommonJS",
     "moduleResolution": "nodenext",
     "target": "es2022",
