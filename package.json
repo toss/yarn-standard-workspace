@@ -1,0 +1,7 @@
+{
+  "name": "toss-standard-workspace",
+  "packageManager": "yarn@3.2.3",
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  }
+}
