@@ -1,0 +1,94 @@
+version: 2.1
+
+parameters:
+  pull_request:
+    type: boolean
+    default: false
+
+orbs:
+  slack: circleci/slack@4.5.0
+
+commands:
+  setup:
+    steps:
+      - run:
+          name: Install yarn
+          command: |
+            COREPACK_PATH=$HOME/.local/bin
+
+            mkdir -p $COREPACK_PATH
+            eval "$(echo PATH=$COREPACK_PATH:\$PATH | tee -a $BASH_ENV)"
+
+            corepack enable --install-directory $COREPACK_PATH
+            yarn install --immutable --immutable-cache
+  export_published_version:
+    description: Export Published Version Environment Variable
+    steps:
+      - run:
+          name: Export PUBLISHED_VERSION
+          command: echo "export PUBLISHED_VERSION=$(node -p "require('./lerna.json').version")" >> $BASH_ENV
+  export_commit_message:
+    description: Export Commit Message
+    steps:
+      - run:
+          name: Export COMMIT_MESSAGE
+          command: echo "export COMMIT_MESSAGE=\"$(printf "%s\n" "$(git log --format=%B -n 1 "$CIRCLE_SHA1" | head -n 1)")\"" >> $BASH_ENV
+
+jobs:
+  lint:
+    docker:
+      - image: cimg/node:16.17
+    steps:
+      - checkout
+      - setup
+      - run:
+          name: Lint
+          command: yarn eslint -c .eslintrc.cjs $(git diff --name-only --diff-filter=ACMRUXB origin/main | grep -E "(.js$|.ts$|.tsx$)")
+  typecheck:
+    parallelism: 2
+    docker:
+      - image: cimg/node:16.17
+    steps:
+      - checkout
+      - setup
+      - run:
+          name: Typecheck
+          command: |
+            WORKSPACES_TO_TEST=$(
+              yarn workspaces since list origin/main HEAD |
+                circleci tests split
+            )
+            echo $WORKSPACES_TO_TEST
+
+            INCLUDE=$(
+              echo $WORKSPACES_TO_TEST |
+                # 띄어쓰기로 연결된 문자열을 콤마로 연결
+                sed 's/ /,/g'
+            )
+            yarn workspaces since run "typecheck" remotes/origin/main --include="{$INCLUDE,}"
+
+  check-peer:
+    docker:
+      - image: cimg/node:16.17
+    steps:
+      - checkout
+      - setup
+      - run:
+          name: Check Peer Dependency
+          command: ./.scripts/check-peer.sh || (echo "Peer Dependency 오류가 발생했습니다."; exit -1)
+
+workflows:
+  main:
+    jobs:
+      - lint:
+          filters:
+            branches:
+              ignore: main
+      - typecheck:
+          filters:
+            branches:
+              ignore: main
+      - check-peer:
+          filters:
+            branches:
+              ignore: main
