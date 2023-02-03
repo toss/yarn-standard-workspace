@@ -2,6 +2,11 @@
 
 > Standard yarn workspace template. Driven by community and @toss
 
+## Purpose
+
+This repo aims for community driven standard for yarn workspace.
+We welcome contribution from everyone in the community.
+
 ## Included
 
 - yarn berry & yarn workspace
