@@ -2,7 +2,7 @@
 to: packages/<%= name %>/tsconfig.json
 ---
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist"
